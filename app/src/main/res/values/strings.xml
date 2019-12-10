@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">New App</string>
+    <string name="body_description">Long placeholder location that should wrap to more than 2 lines of text</string>
+</resources>
