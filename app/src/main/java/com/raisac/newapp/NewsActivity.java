@@ -37,7 +37,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     public static final String LOG_TAG = NewsActivity.class.getName();
     NewsAdapter adapter;
     RecyclerView newRecyclerView;
-
+    private static String SAMPLE_JSON_RESPONSE =
+            "https://content.guardianapis.com/search?api-key=fbd9d4b9-77ed-45b3-9989-effc49198ca1";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,7 +86,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @NonNull
     @Override
     public Loader<ArrayList<News>> onCreateLoader(int id, @Nullable Bundle args) {
-        String url = "";
+        String url = SAMPLE_JSON_RESPONSE;
         return new NewsLoader(NewsActivity.this, url);
     }
 

@@ -8,12 +8,10 @@ import java.util.ArrayList;
 
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
-    private static String SAMPLE_JSON_RESPONSE =
-            "https://content.guardianapis.com/search?api-key=fbd9d4b9-77ed-45b3-9989-effc49198ca1";
-
+    private String mUrl;
     public NewsLoader(NewsActivity context , String url) {
         super(context);
-        SAMPLE_JSON_RESPONSE = url;
+        mUrl = url;
     }
 
     @Override
@@ -27,8 +25,7 @@ public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
         // Perform the HTTP request for earthquake data and process the response.
 
         // Don't perform the request if there are no URLs, or the first URL is null
-
-        ArrayList<News> result = Utils.fetchNewsData(SAMPLE_JSON_RESPONSE);
+        ArrayList<News> result = Utils.fetchNewsData(mUrl);
         return result;
     }
 }
