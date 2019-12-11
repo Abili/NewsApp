@@ -39,7 +39,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String LOG_TAG = NewsActivity.class.getName();
     NewsAdapter adapter;
-    ProgressBar loading;
+    ProgressBar loadingProgressBar;
     RecyclerView newRecyclerView;
     private static String SAMPLE_JSON_RESPONSE =
             "https://content.guardianapis.com/search?api-key=fbd9d4b9-77ed-45b3-9989-effc49198ca1";
@@ -53,7 +53,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         adapter = new NewsAdapter(new ArrayList<News>(), this);
         newRecyclerView = findViewById(R.id.list);
 
-        loading = findViewById(R.id.progressBar);
+        loadingProgressBar = findViewById(R.id.progressBar);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
@@ -81,7 +81,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             getSupportLoaderManager().restartLoader(0, queryBundle, this);
 
             Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
-            loading.setVisibility(View.VISIBLE);
+            loadingProgressBar.setVisibility(View.VISIBLE);
         }
         // Otherwise update the TextView to tell the user there is no
         // connection
@@ -105,7 +105,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         if (data != null && !data.isEmpty()) {
             //and set the visibility to visible
             newRecyclerView.setVisibility(View.VISIBLE);
-            loading.setVisibility(View.GONE);
+            loadingProgressBar.setVisibility(View.GONE);
             adapter = new NewsAdapter(data, NewsActivity.this);
             newRecyclerView.setAdapter(adapter);
         }
