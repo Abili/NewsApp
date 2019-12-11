@@ -19,6 +19,9 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -36,6 +39,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     public static final String LOG_TAG = NewsActivity.class.getName();
     NewsAdapter adapter;
+    ProgressBar loading;
     RecyclerView newRecyclerView;
     private static String SAMPLE_JSON_RESPONSE =
             "https://content.guardianapis.com/search?api-key=fbd9d4b9-77ed-45b3-9989-effc49198ca1";
@@ -45,16 +49,18 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_activity);
 
-        // Create a fake list of earthquake locations.
+        // Create a fake list of new updates/ headlines
         adapter = new NewsAdapter(new ArrayList<News>(), this);
         newRecyclerView = findViewById(R.id.list);
+
+        loading = findViewById(R.id.progressBar);
 
         LinearLayoutManager manager = new LinearLayoutManager(this);
 
         newRecyclerView.setLayoutManager(manager);
         newRecyclerView.setAdapter(adapter);
 
-
+        //set the secoration of the listview to create the seperation lines
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(newRecyclerView.getContext(),
                 manager.getOrientation());
         newRecyclerView.addItemDecoration(dividerItemDecoration);
@@ -75,6 +81,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             getSupportLoaderManager().restartLoader(0, queryBundle, this);
 
             Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
+            loading.setVisibility(View.VISIBLE);
         }
         // Otherwise update the TextView to tell the user there is no
         // connection
@@ -96,8 +103,16 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // If there is a valid list of {@link Earthquake}s, then add them to the adapter's
         // data set. This will trigger the ListView to update.
         if (data != null && !data.isEmpty()) {
+            //and set the visibility to visible
+            newRecyclerView.setVisibility(View.VISIBLE);
+            loading.setVisibility(View.GONE);
             adapter = new NewsAdapter(data, NewsActivity.this);
             newRecyclerView.setAdapter(adapter);
+        }
+        //if theres no data to be displayed then set the visibility of the empty textview to visible
+        else {
+            TextView noNews = findViewById(R.id.no_news);
+            noNews.setVisibility(View.VISIBLE);
         }
 
 

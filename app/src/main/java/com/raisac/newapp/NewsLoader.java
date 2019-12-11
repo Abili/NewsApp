@@ -9,6 +9,9 @@ import java.util.ArrayList;
 
 public class NewsLoader extends AsyncTaskLoader<ArrayList<News>> {
     private String mUrl;
+    /*create a constructor for NewsLoader that takes in the Actitivity that has
+
+     */
     public NewsLoader(NewsActivity context , String url) {
         super(context);
         mUrl = url;

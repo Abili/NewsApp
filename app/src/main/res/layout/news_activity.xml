@@ -1,14 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <!-- Layout for a list of News headlines -->
     <androidx.recyclerview.widget.RecyclerView
+        android:visibility="invisible"
         android:id="@+id/list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp" />
+        android:padding="@dimen/padding_margin_10" />
 
-</LinearLayout>
+    <TextView
+        android:visibility="invisible"
+        android:textSize="@dimen/textSize_20"
+        android:layout_centerInParent="true"
+        android:id="@+id/no_news"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/no_news_updates" />
+
+    <ProgressBar
+        android:visibility="invisible"
+        android:layout_centerInParent="true"
+        android:id="@+id/progressBar"
+        android:progressTint="@android:color/holo_blue_dark"
+        android:progressBackgroundTint="@android:color/holo_blue_dark"
+        style="th:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+
+</RelativeLayout>
