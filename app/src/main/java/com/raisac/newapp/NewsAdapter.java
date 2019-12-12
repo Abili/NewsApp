@@ -11,10 +11,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,17 +43,31 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         holder.title.setText(infoArrayAdapter.get(position).getTitle());
         holder.section.setText(infoArrayAdapter.get(position).getSection());
 
+        /*
+        get the date from the News class
+         */
         String dateObject = infoArrayAdapter.get(position).getDate();
 
-        String formattedDate = String.valueOf(formatDate(dateObject));
+        String formattedDate = null;
+        try {
 
-        holder.time.setText(formattedDate);
-        //holder.date.setText(formattedDate);
+            //the String casted from the News class is passed intot he formatDate() method so tht it can get converted
+            formattedDate = formatDate(dateObject);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        //set the converted time into the TextView
         holder.time.setText(formattedDate);
 
+        /*
+        on clicking any item on the list, an intent is started that sends us to the webpage
+        containing that news body
+         */
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //retrieve the url using the News class from the JSON
                 String url = infoArrayAdapter.get(position).getUrl();
                 Intent intentUrl = new Intent(Intent.ACTION_VIEW);
                 intentUrl.setData(Uri.parse(url));
@@ -69,6 +83,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
     }
 
     public class MyViewHolder extends RecyclerView.ViewHolder {
+
+        //obtain the resouce IDs for the Views using butter Knife.
         @BindView(R.id.heading)
         TextView title;
 
@@ -85,17 +101,19 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
         }
     }
 
-    private String formatDate(String dateObject) {
-        SimpleDateFormat myFormat = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:ss.SSS'Z'");
-        try {
-            return String.valueOf(myFormat.parse(dateObject));
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return dateObject;
+    //convert the String date from the JSON to the actual date
+    private String formatDate(String dateObject) throws ParseException {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+
+        // since its a String use parse to convert it into a date
+        Date dateTime = dateFormat.parse(dateObject);
+
+        //check to see ig the dates are actually beng converted, this mainly is to help with the debugging process
+        System.out.println("Current Date Time : " + dateTime);
+        return String.valueOf(dateTime);
     }
 
-    }
+}
 
 
 

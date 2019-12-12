@@ -144,7 +144,6 @@ public final class Utils {
             for (int i = 0; i < results.length(); i++) {
                 JSONObject object = results.getJSONObject(i);
 
-               // double magnitude = properties.getDouble("webTitle");
                 String title = object.getString("webTitle");
                 String section = object.getString("sectionName");
                 String time = object.getString("webPublicationDate");
