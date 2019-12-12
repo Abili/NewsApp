@@ -2,4 +2,5 @@
     <string name="app_name">New App</string>
     <string name="body_description">Long placeholder location that should wrap to more than 2 lines of text</string>
     <string name="no_news_updates">No News Updates yet</string>
+    <string name="date_place_holder">3:00 PM</string>
 </resources>
