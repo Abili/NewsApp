@@ -5,14 +5,26 @@ public class News {
     private String date;
     private String url;
     private String section;
+    private String Author;
 
 
 
-    public News(String title, String date, String url, String section) {
+
+    public News(String title, String date, String url, String section, String Author) {
         this.title = title;
         this.date = date;
         this.url = url;
         this.section = section;
+        this.Author = Author;
+
+    }
+
+    public String getAuthor() {
+        return Author;
+    }
+
+    public void setAuthor(String author) {
+        Author = author;
     }
 
     public String getUrl() {

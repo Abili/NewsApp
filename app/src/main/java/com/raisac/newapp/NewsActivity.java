@@ -41,13 +41,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     NewsAdapter adapter;
     ProgressBar loadingProgressBar;
     RecyclerView newRecyclerView;
+    TextView noNews;
     private static String SAMPLE_JSON_RESPONSE =
-            "https://content.guardianapis.com/search?api-key=fbd9d4b9-77ed-45b3-9989-effc49198ca1";
-
+            "https://content.guardianapis.com/search";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.news_activity);
+        noNews = findViewById(R.id.no_news);
 
         // Create a fake list of new updates/ headlines
         adapter = new NewsAdapter(new ArrayList<News>(), this);
@@ -86,7 +87,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // Otherwise update the TextView to tell the user there is no
         // connection
         else {
-            Toast.makeText(getApplicationContext(), "Check your Internet Connection...", Toast.LENGTH_LONG).show();
+            noNews.setVisibility(View.VISIBLE);
+            noNews.setText("No internet Connection");
         }
     }
 
@@ -111,7 +113,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         //if theres no data to be displayed then set the visibility of the empty textview to visible
         else {
-            TextView noNews = findViewById(R.id.no_news);
+            /*incase connection is loast eg turned phone on flight mode , the clear the arraylist to prevent
+            showing the information that was already displayed same time as the no news textview
+            */
+            data.clear();
             noNews.setVisibility(View.VISIBLE);
         }
 

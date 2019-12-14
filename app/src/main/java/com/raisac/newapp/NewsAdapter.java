@@ -42,6 +42,7 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         holder.title.setText(infoArrayAdapter.get(position).getTitle());
         holder.section.setText(infoArrayAdapter.get(position).getSection());
+        holder.author.setText("By " + infoArrayAdapter.get(position).getAuthor());
 
         /*
         get the date from the News class
@@ -93,6 +94,8 @@ public class NewsAdapter extends RecyclerView.Adapter<NewsAdapter.MyViewHolder> 
 
         @BindView(R.id.time)
         TextView time;
+        @BindView(R.id.author)
+        TextView author;
 
 
         public MyViewHolder(@NonNull View itemView) {

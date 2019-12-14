@@ -1,5 +1,6 @@
 package com.raisac.newapp;
 
+import android.net.Uri;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -16,7 +17,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * Utility class with methods to help perform the HTTP request and
@@ -33,9 +33,9 @@ public final class Utils {
     /**
      * Query the USGS dataset and return an {@link ArrayList< News >} object to represent a single earthquake.
      */
-    public static ArrayList<News> fetchNewsData(String requestUrl) {
+    public static ArrayList<News> fetchNewsData(String responseUrl) {
         // Create URL object
-        URL url = createUrl(requestUrl);
+        URL url = createUrl(responseUrl);
 
         // Perform HTTP request to the URL and receive a JSON response back
         String jsonResponse = null;
@@ -50,14 +50,17 @@ public final class Utils {
         return news;
     }
 
-    private static URL createUrl(String stringUrl) {
-        URL url = null;
+    private static URL createUrl(String responseUrl) {
+        Uri.Builder builder = Uri.parse(responseUrl).buildUpon();
+        builder.appendQueryParameter("api-key", "fbd9d4b9-77ed-45b3-9989-effc49198ca1")
+                .appendQueryParameter("show-tags", "contributor");
+        String url = builder.build().toString();
         try {
-            url = new URL(stringUrl);
+            return new URL(url);
         } catch (MalformedURLException e) {
-            Log.e(LOG_TAG, "Error with creating URL ", e);
+            e.printStackTrace();
         }
-        return url;
+        return null;
     }
 
 
@@ -127,6 +130,7 @@ public final class Utils {
      */
 
     private static ArrayList<News> extractFeatureFromJson(String newsJSON) {
+        String author = "";
         ArrayList<News> news = new ArrayList<>();
         // Extract relevant fields from the JSON response and create an {@link Event} object
         // If the JSON string is empty or null, then return early.
@@ -143,13 +147,17 @@ public final class Utils {
             JSONArray results = response.getJSONArray("results");
             for (int i = 0; i < results.length(); i++) {
                 JSONObject object = results.getJSONObject(i);
-
                 String title = object.getString("webTitle");
                 String section = object.getString("sectionName");
                 String time = object.getString("webPublicationDate");
-
                 String url1 = object.getString("webUrl");
-                News _new = new News(title,time, url1, section);
+                JSONArray tagsArray = object.getJSONArray("tags");
+                for (int j = 0; j < tagsArray.length(); j++) {
+                    JSONObject newstag = tagsArray.getJSONObject(j);
+                    author = newstag.getString("webTitle");
+                }
+
+                News _new = new News(title, time, url1, section, author);
                 news.add(_new);
 
             }
@@ -162,7 +170,6 @@ public final class Utils {
     /**
      * Returns new URL object from the given string URL.
      */
-
 
 
     /**
