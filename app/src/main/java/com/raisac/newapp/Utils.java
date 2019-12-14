@@ -22,13 +22,14 @@ import java.util.ArrayList;
  * Utility class with methods to help perform the HTTP request and
  * parse the response.
  */
-public final class Utils {
+@SuppressWarnings("JavaDoc")
+final class Utils {
 
 
     /**
      * Tag for the log messages
      */
-    public static final String LOG_TAG = Utils.class.getSimpleName();
+    private static final String LOG_TAG = Utils.class.getSimpleName();
 
     /**
      * Query the USGS dataset and return an {@link ArrayList< News >} object to represent a single earthquake.
@@ -45,9 +46,8 @@ public final class Utils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        ArrayList<News> news = extractFeatureFromJson(jsonResponse);
         // Return the {@link Event}
-        return news;
+        return extractFeatureFromJson(jsonResponse);
     }
 
     private static URL createUrl(String responseUrl) {
@@ -93,7 +93,7 @@ public final class Utils {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the earthquake JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the news JSON results.", e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -126,7 +126,7 @@ public final class Utils {
 
     /**
      * Return an {@link ArrayList< News >} object by parsing out information
-     * about the first earthquake from the input earthquakeJSON string.
+     * about the first news from the input newsJson string.
      */
 
     private static ArrayList<News> extractFeatureFromJson(String newsJSON) {
@@ -166,15 +166,5 @@ public final class Utils {
         }
         return news;
     }
-
-    /**
-     * Returns new URL object from the given string URL.
-     */
-
-
-    /**
-     * Return an {@link ArrayList< News >} object by parsing out information
-     * about the first earthquake from the input earthquakeJSON string.
-     */
 
 }

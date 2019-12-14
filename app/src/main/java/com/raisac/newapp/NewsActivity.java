@@ -34,16 +34,15 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
+@SuppressWarnings({"deprecation", "UnnecessaryLocalVariable"})
 public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<ArrayList<News>> {
+    private NewsAdapter adapter;
+    private ProgressBar loadingProgressBar;
+    private RecyclerView newRecyclerView;
+    private TextView noNews;
 
-    public static final String LOG_TAG = NewsActivity.class.getName();
-    NewsAdapter adapter;
-    ProgressBar loadingProgressBar;
-    RecyclerView newRecyclerView;
-    TextView noNews;
-    private static String SAMPLE_JSON_RESPONSE =
-            "https://content.guardianapis.com/search";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,11 +52,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // Create a fake list of new updates/ headlines
         adapter = new NewsAdapter(new ArrayList<News>(), this);
         newRecyclerView = findViewById(R.id.list);
-
         loadingProgressBar = findViewById(R.id.progressBar);
-
         LinearLayoutManager manager = new LinearLayoutManager(this);
-
         newRecyclerView.setLayoutManager(manager);
         newRecyclerView.setAdapter(adapter);
 
@@ -66,35 +62,36 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
                 manager.getOrientation());
         newRecyclerView.addItemDecoration(dividerItemDecoration);
 
-
         // Check the status of the network connection.
+        checkForNetworkConnectivity();
+    }
+
+    //method to check network connectivity
+    private void checkForNetworkConnectivity() {
         ConnectivityManager connMgr = (ConnectivityManager)
                 getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo networkInfo = null;
         if (connMgr != null) {
             networkInfo = connMgr.getActiveNetworkInfo();
         }
-
         // If the network is available, connected,  start a Loader AsyncTask.
         if (networkInfo != null && networkInfo.isConnected()) {
-
             Bundle queryBundle = new Bundle();
             getSupportLoaderManager().restartLoader(0, queryBundle, this);
-
             Toast.makeText(getApplicationContext(), "Loading...", Toast.LENGTH_LONG).show();
             loadingProgressBar.setVisibility(View.VISIBLE);
         }
         // Otherwise update the TextView to tell the user there is no
         // connection
         else {
-            noNews.setVisibility(View.VISIBLE);
-            noNews.setText("No internet Connection");
+            Toast.makeText(getApplicationContext(), "Check Network Connectivity", Toast.LENGTH_LONG).show();
         }
     }
 
     @NonNull
     @Override
     public Loader<ArrayList<News>> onCreateLoader(int id, @Nullable Bundle args) {
+        String SAMPLE_JSON_RESPONSE = "https://content.guardianapis.com/search";
         String url = SAMPLE_JSON_RESPONSE;
         return new NewsLoader(NewsActivity.this, url);
     }
@@ -116,16 +113,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             /*incase connection is loast eg turned phone on flight mode , the clear the arraylist to prevent
             showing the information that was already displayed same time as the no news textview
             */
-            data.clear();
+            checkForNetworkConnectivity();
+            Objects.requireNonNull(data).clear();
             noNews.setVisibility(View.VISIBLE);
         }
-
-
     }
 
     @Override
     public void onLoaderReset(@NonNull Loader<ArrayList<News>> loader) {
 
     }
-
 }
